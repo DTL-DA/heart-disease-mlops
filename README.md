@@ -26,8 +26,7 @@ El modelo desplegado es un RandomForest (400 árboles, profundidad máxima 8). E
 heart-disease-mlops/
 ├── app/
 │   ├── api.py                  # API FastAPI
-│   ├── model.joblib            # Pipeline entrenado (preprocesamiento + modelo)
-│   └── model_info.json         # Modelo, hiperparámetros y métricas
+│   └── model.joblib            # Pipeline entrenado (preprocesamiento + modelo)
 ├── data/heart.csv
 ├── docker/
 │   ├── Dockerfile
@@ -41,7 +40,7 @@ heart-disease-mlops/
 ├── src/heart_ml.py             # Funciones reutilizables de carga, entrenamiento y evaluación
 ├── monitoring/drift_report.py  # Etapa 6: genera drift_report.html
 ├── tests/test_api.py           # Pruebas automáticas de la API
-├── .github/workflows/ci.yml    # Etapa 5: lint, pruebas y construcción de la imagen
+├── .github/workflows/ci.yml    # Etapa 5: lint y pruebas automáticas
 ├── train.py                    # Entrena, compara y exporta el modelo
 ├── drift_report.html
 ├── model.joblib
@@ -93,7 +92,6 @@ Respuesta:
 |---|---|---|
 | `/predict` | POST | Probabilidad de enfermedad y predicción (1 si la probabilidad supera 0,5) |
 | `/health` | GET | Estado del servicio; lo usan las sondas de Kubernetes |
-| `/model-info` | GET | Modelo desplegado, hiperparámetros y métricas |
 | `/docs` | GET | Documentación interactiva |
 
 ### Etapa 4. Kubernetes local con Minikube
@@ -111,7 +109,7 @@ Para usar una imagen publicada en Docker Hub, cambie `image` en `k8s/deployment.
 
 ### Etapa 5. Integración continua
 
-El flujo `.github/workflows/ci.yml` se ejecuta en cada `push`: instala dependencias, revisa el estilo con `flake8`, corre las pruebas con `pytest` y construye la imagen Docker. Localmente:
+El flujo `.github/workflows/ci.yml` se ejecuta en cada `push`: instala dependencias, revisa el estilo con `flake8` y corre las pruebas con `pytest`. Localmente:
 
 ```bash
 flake8 app/ src/ tests/ train.py
@@ -137,7 +135,3 @@ El reporte compara entrenamiento (referencia) contra prueba (datos actuales). Ni
 | `python:3.10-slim` | `python:3.13-slim` | scikit-learn 1.9.1, con el que se entrenó el modelo, requiere una versión más reciente de Python |
 | `evidently.report` | `from evidently import Report` | La interfaz cambió en Evidently 0.7 |
 | El flujo «sin fuga» del ejemplo conserva `leaky_feature` | Los tipos de fuga se demuestran por separado | En el ejemplo original ambos AUC salen cercanos a 1 y la comparación no muestra diferencia |
-
-## Limitaciones
-
-La muestra es de pacientes remitidos por sospecha clínica, con 55,3 % de enfermos, de modo que la precisión sería menor en población general. El 79 % son hombres y el desempeño en mujeres no está validado. El dataset combina cinco fuentes sin identificarlas, por lo que no se puede comprobar si el modelo generaliza entre hospitales. El conjunto de prueba tiene 184 pacientes, y las diferencias entre modelos equivalen a uno o dos de ellos. El proyecto es académico y no es una herramienta de diagnóstico.

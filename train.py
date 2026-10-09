@@ -4,8 +4,6 @@ validación cruzada y lo exporta para la API.
 
 Uso:  python train.py
 """
-import json
-
 import joblib
 
 from src import heart_ml as h
@@ -25,11 +23,6 @@ def main():
 
     resumen = ranking.drop(columns="Mejores hiperparámetros").round(4)
     resumen.to_csv(h.RAIZ / "ranking_modelos.csv")
-    info = {"modelo": ganador, "hiperparametros": ajustados[ganador].best_params_,
-            "auc_cv": round(float(ranking.iloc[0]["AUC CV (media)"]), 4),
-            "auc_prueba": round(float(ranking.iloc[0]["AUC prueba"]), 4),
-            "registros_entrenamiento": len(X_train), "registros_prueba": len(X_test)}
-    (h.RAIZ / "app" / "model_info.json").write_text(json.dumps(info, indent=2, ensure_ascii=False, default=str))
     print(resumen.to_string())
     print(f"\nModelo exportado: {ganador} -> app/model.joblib")
 

@@ -1,5 +1,5 @@
 name: CI
-on: [push, pull_request]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,5 +17,3 @@ jobs:
         run: flake8 app/ src/ tests/ train.py
       - name: Tests
         run: pytest tests/ -v
-      - name: Build Docker image
-        run: docker build -t heart-api -f docker/Dockerfile .

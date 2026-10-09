@@ -1,5 +1,4 @@
 """API REST para predecir enfermedad cardíaca con el modelo entrenado."""
-import json
 from pathlib import Path
 from typing import Literal
 
@@ -10,7 +9,6 @@ from pydantic import BaseModel, Field
 
 RUTA = Path(__file__).resolve().parent
 model = joblib.load(RUTA / "model.joblib")
-INFO = json.loads((RUTA / "model_info.json").read_text(encoding="utf-8"))
 
 app = FastAPI(
     title="Heart Disease API",
@@ -42,17 +40,12 @@ class Paciente(BaseModel):
 
 @app.get("/")
 def raiz():
-    return {"servicio": "Heart Disease API", "documentacion": "/docs", "modelo": INFO["modelo"]}
+    return {"servicio": "Heart Disease API", "documentacion": "/docs"}
 
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
-
-
-@app.get("/model-info")
-def model_info():
-    return INFO
 
 
 @app.post("/predict")
