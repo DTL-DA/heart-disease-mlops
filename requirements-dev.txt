@@ -1,0 +1,7 @@
+-r docker/requirements.txt
+flake8
+pytest
+httpx
+matplotlib
+evidently==0.7.23
+jupyter

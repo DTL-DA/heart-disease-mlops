@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heart-model
+  labels:
+    app: heart-model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heart-model
+  template:
+    metadata:
+      labels:
+        app: heart-model
+    spec:
+      containers:
+        - name: model
+          # Imagen local cargada en Minikube con: minikube image load heart-api:latest
+          # Para usar Docker Hub, cambie a <TU_USUARIO_DOCKER>/heart-api y quite imagePullPolicy.
+          image: heart-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

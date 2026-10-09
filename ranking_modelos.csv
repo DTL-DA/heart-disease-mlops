@@ -1,0 +1,8 @@
+Puesto,Modelo,AUC CV (media),AUC CV (desv.),AUC prueba,Exactitud prueba,Precisión prueba,Sensibilidad prueba
+1,RandomForest,0.9309,0.0184,0.9311,0.8804,0.8846,0.902
+2,GradientBoosting,0.9294,0.0093,0.9243,0.8859,0.8932,0.902
+3,LogisticRegression,0.9183,0.024,0.9352,0.8804,0.8774,0.9118
+4,SVC,0.9174,0.0374,0.931,0.8533,0.8641,0.8725
+5,KNN,0.9164,0.0291,0.9283,0.8696,0.89,0.8725
+6,GaussianNB,0.908,0.0151,0.9093,0.875,0.8911,0.8824
+7,DecisionTree,0.9047,0.0256,0.8862,0.8424,0.8476,0.8725

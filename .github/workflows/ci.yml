@@ -1,0 +1,21 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          pip install -r docker/requirements.txt
+          pip install flake8 pytest httpx
+      - name: Lint
+        run: flake8 app/ src/ tests/ train.py
+      - name: Tests
+        run: pytest tests/ -v
+      - name: Build Docker image
+        run: docker build -t heart-api -f docker/Dockerfile .
