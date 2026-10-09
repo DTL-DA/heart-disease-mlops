@@ -45,6 +45,7 @@ heart-disease-mlops/
 ├── drift_report.html
 ├── model.joblib
 ├── ranking_modelos.csv
+├── evidencias/                 # Capturas y PDF que respaldan cada etapa
 └── README.md
 ```
 
@@ -123,6 +124,20 @@ python monitoring/drift_report.py          # genera drift_report.html
 ```
 
 El reporte compara entrenamiento (referencia) contra prueba (datos actuales). Ninguna de las 11 variables presenta deriva al 5 %; la más cercana es el colesterol, con un valor p de 0,067. Este resultado es el esperado, porque ambos conjuntos salen de la misma partición estratificada, y sirve como línea de referencia. En producción, los datos actuales se reemplazan por los registros que recibe la API.
+
+## Evidencias por etapa
+
+Cada etapa del enunciado queda respaldada por archivos del proyecto y por capturas guardadas en [evidencias/](evidencias/). El documento [Evidencias_Tarea2_MLOps.pdf](evidencias/Evidencias_Tarea2_MLOps.pdf) reúne todo en un solo lugar, con una página por etapa. Los cuadernos conservan sus salidas ejecutadas, de modo que GitHub los muestra completos sin correr nada.
+
+| Etapa | Archivos | Evidencia |
+|---|---|---|
+| 0. Estructura | Árbol de carpetas de la sección anterior | Carpeta del repositorio |
+| 1. Análisis, fuga de datos y ranking de modelos | [1_model_leakage_demo.ipynb](notebooks/1_model_leakage_demo.ipynb), [src/heart_ml.py](src/heart_ml.py) | [Distribuciones](evidencias/etapa1_eda_distribuciones.png), [ranking](evidencias/etapa1_ranking_grafico.png) |
+| 2. Modelado con validación segura | [2_model_pipeline_cv.ipynb](notebooks/2_model_pipeline_cv.ipynb) | [Matriz de confusión y ROC](evidencias/etapa2_matriz_roc.png) |
+| 3. FastAPI y Docker | [app/api.py](app/api.py), [docker/Dockerfile](docker/Dockerfile), [docker/requirements.txt](docker/requirements.txt) | [Imagen](evidencias/etapa3_docker_imagen.png), [contenedor](evidencias/etapa3_docker_contenedor.png), [predicción](evidencias/etapa3_predict_docker.png) |
+| 4. Kubernetes con Minikube | [k8s/deployment.yaml](k8s/deployment.yaml), [k8s/service.yaml](k8s/service.yaml) | [kubectl](evidencias/etapa4_kubectl.png), [predicción por Minikube](evidencias/etapa4_predict_minikube.png) |
+| 5. Integración continua | [.github/workflows/ci.yml](.github/workflows/ci.yml), [tests/test_api.py](tests/test_api.py) | [Corridas](evidencias/etapa5_actions_corridas.png), [pasos](evidencias/etapa5_actions_pasos.png), [Actions en GitHub](https://github.com/DTL-DA/heart-disease-mlops/actions) |
+| 6. Monitoreo de deriva | [monitoring/drift_report.py](monitoring/drift_report.py), [drift_report.html](drift_report.html) | [Reporte completo](evidencias/etapa6_deriva_completo.png), [detalle](evidencias/etapa6_deriva_detalle.png) |
 
 ## Decisiones y ajustes frente al enunciado
 
