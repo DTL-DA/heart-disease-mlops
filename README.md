@@ -42,6 +42,8 @@ heart-disease-mlops/
 ├── tests/test_api.py           # Pruebas automáticas de la API
 ├── .github/workflows/ci.yml    # Etapa 5: lint y pruebas automáticas
 ├── train.py                    # Entrena, compara y exporta el modelo
+├── requirements-dev.txt        # Dependencias para entrenar, probar y monitorear
+├── .flake8                     # Reglas de estilo de la revisión con flake8
 ├── drift_report.html
 ├── model.joblib
 ├── ranking_modelos.csv
@@ -55,7 +57,7 @@ heart-disease-mlops/
 
 ```bash
 pip install -r requirements-dev.txt
-python train.py                      # compara los 7 modelos y exporta app/model.joblib
+python train.py                      # compara los 7 modelos; exporta el modelo (app/model.joblib) y ranking_modelos.csv
 jupyter notebook notebooks/          # cuadernos con el análisis y las interpretaciones
 ```
 
@@ -91,6 +93,7 @@ Respuesta:
 
 | Ruta | Método | Qué devuelve |
 |---|---|---|
+| `/` | GET | Nombre del servicio y enlace a la documentación |
 | `/predict` | POST | Probabilidad de enfermedad y predicción (1 si la probabilidad supera 0,5) |
 | `/health` | GET | Estado del servicio; lo usan las sondas de Kubernetes |
 | `/docs` | GET | Documentación interactiva |
@@ -146,6 +149,7 @@ Cada etapa del enunciado queda respaldada por archivos del proyecto y por captur
 | Columna objetivo `target` | `HeartDisease` | Es el nombre real en `heart.csv` |
 | `MinMaxScaler` sobre todo `X` | `ColumnTransformer` dentro del `Pipeline` | Hay 5 columnas de texto que deben codificarse antes de escalar |
 | Sin tratamiento de faltantes | Colesterol = 0 imputado con la mediana | 172 registros traen el colesterol en cero, y no falta al azar: 88,4 % de ellos tiene enfermedad |
+| Sin tratamiento de valores imposibles | Se elimina 1 registro con `RestingBP` = 0 | La presión arterial no puede ser cero; quedan 917 pacientes para modelar |
 | `features: list` en la API | Campos con nombre y validación | El modelo necesita los nombres de columna, y la validación rechaza datos inválidos |
 | `python:3.10-slim` | `python:3.13-slim` | scikit-learn 1.9.1, con el que se entrenó el modelo, requiere una versión más reciente de Python |
 | `evidently.report` | `from evidently import Report` | La interfaz cambió en Evidently 0.7 |
